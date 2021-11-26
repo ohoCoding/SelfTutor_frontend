@@ -1,7 +1,12 @@
 import React , { Component } from 'react';
 import './App.css';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
-import RoutesSwitch from './routesSwitch';
+import Manager from './pages/layouts/Manager.js';
+import Teacher from './pages/teacher/TeacherList.js';
+import Class from './pages/class/ClassList.js';
+import Home from './pages/Home.js';
+import Register from './pages/Register.js';
+import { BrowserRouter, Routes, Route, Link  } from 'react-router-dom';
 
 const theme = {
   white: '#fff',
@@ -136,7 +141,23 @@ function App() {
     return (
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <RoutesSwitch />
+       
+        
+        <BrowserRouter>
+          <Manager/>
+            <Routes>
+        
+    
+             <Route path = "/home" element={<Home/>}/>
+             <Route path = "/register" element ={<Register/>}/>
+             <Route path = "/teacher/list" element={<Teacher/>}/>
+             <Route path = "/class/list" element={<Class/>}/>
+
+             
+
+            </Routes>
+       
+      </BrowserRouter>
       </ThemeProvider>
     );
   

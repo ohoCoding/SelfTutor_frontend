@@ -1,13 +1,15 @@
 import React, {useEffect, useRef ,useState ,useCallback} from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 
+import logo from '../../assets/images/LOGO.png';
 import { FiMenu as MenuIcon, FiX as CloseIcon} from 'react-icons/fi';
-
-import {ReactComponent as HomeIcon} from '../../assets/images/navbar/icon-home.svg';
-import {ReactComponent as TeacherIcon} from '../../assets/images/navbar/icon-teacher.svg';
-import {ReactComponent as ClassIcon} from '../../assets/images/navbar/icon-class.svg';
+import HomeIcon from '../../assets/images/navbar/home.png';
+import TeacherIcon from '../../assets/images/navbar/teacher.png';
+import ClassIcon from '../../assets/images/navbar/class.png';
 
 const NavBar = (props) => {
   const {pathname} = props;
@@ -15,6 +17,7 @@ const NavBar = (props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const highMenuList = useRef([
+    '홈',
     '선생님리스트',  
     '강의리스트',
   ]);
@@ -56,7 +59,7 @@ const NavBar = (props) => {
                 className = "teacher"
                 onClick = {() => MenuClick('/teacher/list')}
                 active={pathname.indexOf('/teacher') === 0}
-              >선생님 리스트
+              >  선생님 리스트
               </LowMenuItem> 
             </LowMenuList>
           );
@@ -67,7 +70,7 @@ const NavBar = (props) => {
                 className = "teacher"
                 onClick = {() => MenuClick('/class/list')}
                 active={pathname.indexOf('/class') === 0}
-              >강의 리스트
+              >  강의 리스트
               </LowMenuItem> 
             </LowMenuList>
           );
@@ -82,11 +85,11 @@ const NavBar = (props) => {
             {highMenuList.current.map((menu, index) =>{
               return index === 0? (
                 <MenuItem 
-                  onClick ={() => UpperMenuClick(index, '/')}
+                  onClick ={() => UpperMenuClick(index, '/home')}
                   active ={highMenuState[index]}
                   key={index}
                 >
-                  <HomeIcon/>
+                  <img src={HomeIcon} alt ="" width="30" height="30"/>
                   <span>{menu}</span>
                 </MenuItem>
               ) : (
@@ -97,8 +100,8 @@ const NavBar = (props) => {
                   >
                     {
                       {
-                        1: <TeacherIcon />,
-                        2: <ClassIcon />,
+                        1: <img src={TeacherIcon} alt="" width="30" height="30"/>,
+                        2: <img src={ClassIcon} alt="" width="30" height="30"/>,
                       }[index]
                     }
                     <span>{menu}</span>
@@ -117,7 +120,7 @@ const NavBar = (props) => {
     <>
       {isMobile ? (
         <MobileContainer>
-          <Link to="/">
+          <Link to="/home">
             <img src={logo} alt="" />
           </Link>
          {isMenuOpen ?(
@@ -138,7 +141,7 @@ const NavBar = (props) => {
       ):(
         <Container>
           <MenuLogo>
-            <Link to="/dashboard">
+            <Link to="/home">
               <img src={logo} alt="" />
             </Link>
           </MenuLogo>
@@ -280,4 +283,11 @@ const MenuItem = styled.div`
     }
   }
 `;
-export default NavBar;
+
+const mapStateToProps = (state) => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+});
+
+export default connect(mapStateToProps, { push })(React.memo(NavBar));
