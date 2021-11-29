@@ -13,6 +13,10 @@ import ClassIcon from '../../assets/images/navbar/class.png';
 
 const NavBar = (props) => {
   const {pathname} = props;
+  useEffect(() => {
+    console.log(props);
+    console.log(pathname);
+  })
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -33,8 +37,7 @@ const NavBar = (props) => {
 
   const MenuClick = useCallback (
     (url) => {
-      setIsMenuOpen(false);
-      props.push(url);
+        props.push(url);
     },[props]
   );
   
@@ -57,8 +60,8 @@ const NavBar = (props) => {
             <LowMenuList isOpen = {highMenuState[index]}>
               <LowMenuItem
                 className = "teacher"
-                onClick = {() => MenuClick('/teacher/list')}
-                active={pathname.indexOf('/teacher') === 0}
+                onClick = {() =>  <Link to="./pages/teacher/TeacherList"/>}
+                // active={pathname.indexOf('/teacher') === 0}
               >  선생님 리스트
               </LowMenuItem> 
             </LowMenuList>
@@ -67,9 +70,9 @@ const NavBar = (props) => {
           return(
             <LowMenuList isOpen = {highMenuState[index]}>
               <LowMenuItem
-                className = "teacher"
+                className = "class"
                 onClick = {() => MenuClick('/class/list')}
-                active={pathname.indexOf('/class') === 0}
+                // active={pathname.indexOf('/class') === 0}
               >  강의 리스트
               </LowMenuItem> 
             </LowMenuList>
@@ -85,7 +88,7 @@ const NavBar = (props) => {
             {highMenuList.current.map((menu, index) =>{
               return index === 0? (
                 <MenuItem 
-                  onClick ={() => UpperMenuClick(index, '/home')}
+                  onClick ={() => UpperMenuClick(index, '/')}
                   active ={highMenuState[index]}
                   key={index}
                 >
@@ -120,7 +123,7 @@ const NavBar = (props) => {
     <>
       {isMobile ? (
         <MobileContainer>
-          <Link to="/home">
+          <Link to="/">
             <img src={logo} alt="" />
           </Link>
          {isMenuOpen ?(
@@ -141,7 +144,7 @@ const NavBar = (props) => {
       ):(
         <Container>
           <MenuLogo>
-            <Link to="/home">
+            <Link to="/">
               <img src={logo} alt="" />
             </Link>
           </MenuLogo>
@@ -284,10 +287,4 @@ const MenuItem = styled.div`
   }
 `;
 
-const mapStateToProps = (state) => ({
-  pathname: state.router.location.pathname,
-  search: state.router.location.search,
-  hash: state.router.location.hash,
-});
-
-export default connect(mapStateToProps, { push })(React.memo(NavBar));
+export default connect(push)(React.memo(NavBar));

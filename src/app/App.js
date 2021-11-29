@@ -1,13 +1,12 @@
 import React , { Component } from 'react';
-import './App.css';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
-import Manager from './pages/layouts/Manager.js';
-import Teacher from './pages/teacher/TeacherList.js';
-import Class from './pages/class/ClassList.js';
-import Home from './pages/Home.js';
-import Register from './pages/Register.js';
-import { BrowserRouter, Routes, Route, Link  } from 'react-router-dom';
-
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+// import Teacher from './pages/teacher/TeacherList.js';
+// import Class from './pages/class/ClassList.js';
+// import Home from './pages/Home.js';
+// import Register from './pages/Register.js';
+// import { BrowserRouter } from 'react-router-dom';
+import Routes from './routes';
 const theme = {
   white: '#fff',
   black: '#000',
@@ -141,23 +140,9 @@ function App() {
     return (
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-       
-        
-        <BrowserRouter>
-          <Manager/>
-            <Routes>
-        
-    
-             <Route path = "/home" element={<Home/>}/>
-             <Route path = "/register" element ={<Register/>}/>
-             <Route path = "/teacher/list" element={<Teacher/>}/>
-             <Route path = "/class/list" element={<Class/>}/>
-
-             
-
-            </Routes>
-       
-      </BrowserRouter>
+        <Router>
+              <Routes/>
+        </Router>
       </ThemeProvider>
     );
   
