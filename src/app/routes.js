@@ -1,23 +1,13 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { Switch ,Route, Redirect} from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { useSelector } from 'react-redux';
-import Home from '../pages/home/Home';
-// import { allFlattenRoutes as routes } from './routeSwitch';
-// const Home = React.lazy(() => import('../pages/home/Home'));
-const Register = React.lazy(() => import('../pages/Register'));
-const TeacherList = React.lazy(() => import('../pages/teacher/TeacherList'));
-const TeacherAdd = React.lazy(() => import('../pages/teacher/TeacherAdd'));
-const TeacherDetail = React.lazy(() => import('../pages/teacher/TeacherDetail'));
 
-// import AuthLayout from '../pages/layouts/Auth';
-// import ManagerLayout from '../pages/layouts/Manager';
+import Manager from '../pages/layouts/Manager';
+import {allFlattenRoutes as routes} from './routeSwitch';
 
-
-// import RndBackground from '../pages/player/rnd/Background';
-// import ContextBackground from '../pages/player/context/Background';
 
 // const Layout = props => {
 //   // const pathname = props.pathname;
@@ -35,24 +25,38 @@ const TeacherDetail = React.lazy(() => import('../pages/teacher/TeacherDetail'))
 //   // return <AuthLayout {...props} />;
 // };
 
-const Routes = () => {
-  
+
+const Routes = props => {
+  const pathname = props.pathname;
+  const history = createBrowserHistory();
+  useEffect(() => {
+    console.log(pathname);
+    console.log(props.history);
+    console.log(history);
+  },[props,pathname,history]);
+
   return (
-    
-       
+     <ConnectedRouter history={history}>
         <Switch>
-          <Route exact path ='/' component ={Home}/>
-          <Route exact path ='/register' component ={Register} />
-          <Route exact path ='/teacher/list' component={TeacherList}/>
-          <Route exact path ='/teacher/teacheradd' component={TeacherAdd}/>
-          <Route exact path ='/teacher/teacherdetail' component={TeacherDetail}/>
-        </Switch>
+          {routes.map((route, index ) => {
+            return (
+              !route.children && (
+                <route.route 
+                  key = {index}
+                  path = {route.path}
+                  pathname = {route.pathname}
+                  exact= {route.exact}
+                  component={route.component}
+                ></route.route>
+              )
+            );
+          })}
+          <Route render={() => <Redirect to="/home" />}></Route>
+         </Switch>
+     </ConnectedRouter>
       
-    
-     
   );
- 
-  
 };
 
-export default Routes;
+
+export default (React.memo(Routes));

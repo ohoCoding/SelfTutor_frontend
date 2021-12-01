@@ -1,18 +1,24 @@
-import React, {Component} from "react";
+import React, {Component, useEffect} from "react";
 
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 import NavBar from "../common/NavBar";
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
+import Manager from "../layouts/Manager";
 
 const Home = props => {
-
+  useEffect(() => {
+    console.log(props);
+    console.log('hi');
+  });
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
     return(
       <>
       {/* <Container isMobile={isMobile}>
       
        </Container> */}
-       <NavBar/>
+       <Manager/>
       </>
     ) 
   
@@ -33,4 +39,12 @@ const Header = styled.div`
   display: flex;
   align-items: center;
 `;
-export default Home;
+
+
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+});
+
+export default connect(mapStateToProps, { push })(React.memo(Home));
